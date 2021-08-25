@@ -7,7 +7,7 @@ static const routeName =  '/categories-meals';
 
 
    @override
-   Widget build(BuildContext context) {
+ Widget build(BuildContext context) {
    final route = ModalRoute.of(context);
     if (route == null) return SizedBox.shrink();
   final routeArgs = route.settings.arguments as Map<String ,String>;
@@ -26,6 +26,7 @@ categoryMeals[index].imageUrl ,
 categoryMeals[index].duration,
 categoryMeals[index].complexity,
 categoryMeals[index].affordability,
+categoryMeals[index].id
 );
 } , itemCount: categoryMeals.length,)  ,
      );
