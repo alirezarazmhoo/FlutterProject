@@ -1,34 +1,67 @@
  import 'package:flutter/material.dart';
   import '../dommy_data.dart';
   import '../widgets/meal_item.dart';
-
- class CategoryMealsScreen extends StatelessWidget {
+import '../models/meals.dart';
+ class CategoryMealsScreen  extends StatefulWidget {
 static const routeName =  '/categories-meals';
+
+  @override
+  _CategoryMealsScreenState createState() => _CategoryMealsScreenState();
+}
+
+class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
+String categoryTitle = "" ; 
+List<Meal> displayedMeal = List.empty();
+var _loadedInitialData = false ; 
+@override
+  void initState() {
+
+    super.initState();
+  }
+
+void _removeMeal(String mealId){
+
+setState(() {
+  displayedMeal.removeWhere((meal) => meal.id == mealId);
+});
+
+}
+
+@override
+  void didChangeDependencies() {
+    if(!_loadedInitialData){
+
+final routeArgs = ModalRoute.of(context)!.settings.arguments as Map<String ,String>;
+final categoryTitle = routeArgs['title'];
+final cateogrtyId =  routeArgs['id'];
+final displayedMeal = DUMMY_MEALS.where((meal)  {
+return meal.categories.contains(cateogrtyId);
+}).toList();
+_loadedInitialData = true ; 
+    }
+    super.didChangeDependencies();
+  }
+
 
 
    @override
  Widget build(BuildContext context) {
-   final route = ModalRoute.of(context);
-    if (route == null) return SizedBox.shrink();
-  final routeArgs = route.settings.arguments as Map<String ,String>;
-final categoryTitle = routeArgs['title'];
-final cateogrtyId =  routeArgs['id'];
-final categoryMeals = DUMMY_MEALS.where((meal)  {
-return meal.categories.contains(cateogrtyId);
-}).toList();
+
  return Scaffold(
 appBar: AppBar(
 title: Text(categoryTitle ?? ""),
 ),
 body: ListView.builder(itemBuilder: (ctx , index){
-return MealItem(  categoryMeals[index].title , 
-categoryMeals[index].imageUrl ,
-categoryMeals[index].duration,
-categoryMeals[index].complexity,
-categoryMeals[index].affordability,
-categoryMeals[index].id
+return MealItem(  displayedMeal[index].title , 
+displayedMeal[index].imageUrl ,
+displayedMeal[index].duration,
+displayedMeal[index].complexity,
+displayedMeal[index].affordability,
+displayedMeal[index].id , 
+_removeMeal  
+
 );
-} , itemCount: categoryMeals.length,)  ,
+} , itemCount: displayedMeal.length,)  ,
      );
    }
- }
+}

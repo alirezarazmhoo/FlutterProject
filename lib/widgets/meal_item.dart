@@ -9,6 +9,7 @@ class MealItem extends StatelessWidget {
   final int duration;
   final Complexity complexity;
   final Affordability affordability;
+  final Function removeitem ; 
   String get compelexityText{
   switch(complexity){
   case Complexity.Simple :
@@ -40,7 +41,7 @@ class MealItem extends StatelessWidget {
   }
 
 
-  MealItem(this.title , this.imageUrl , this.duration , this.complexity , this.affordability , this.id);
+  MealItem(this.title , this.imageUrl , this.duration , this.complexity , this.affordability , this.id ,this.removeitem );
 
   void SelectMeal(BuildContext context) {
     Navigator.of(context).pushNamed(MealDetailScreen.routeName , arguments: id );
